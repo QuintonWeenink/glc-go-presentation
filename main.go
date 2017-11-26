@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"fmt"
 	"os"
+	"log"
 	"encoding/json"
 	"io/ioutil"
 )
