@@ -1,6 +1,18 @@
 package main
 
 import (
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/heroku/x/hmetrics/onload"
+)
+
+
+package main
+
+import (
 	"net/http"
 	"fmt"
 	"os"
@@ -54,19 +66,38 @@ func serveRestGopher(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(response))
 }
 
+// func main() {
+// 	port := os.Getenv("PORT")
+// 	if port == "" {
+// 		port = "8080"
+// 	}
+// 	host := "localhost:" + port
+//
+// 	fmt.Println("Serving on " + host + "..")
+//
+// 	http.HandleFunc("/gopher", serveRestGopher)
+// 	http.HandleFunc("/", serveRest)
+//
+// 	http.ListenAndServe(host, nil)
+// }
+
 func main() {
 	port := os.Getenv("PORT")
+
 	if port == "" {
-		port = "8080"
+		log.Fatal("$PORT must be set")
 	}
-	host := "localhost:" + port
 
-	fmt.Println("Serving on " + host + "..")
+	router := gin.New()
+	router.Use(gin.Logger())
+	router.LoadHTMLGlob("templates/*.tmpl.html")
+	router.Static("/static", "static")
 
-	http.HandleFunc("/gopher", serveRestGopher)
-	http.HandleFunc("/", serveRest)
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.tmpl.html", nil)
+	})
 
-	http.ListenAndServe(host, nil)
+	router.Run(":" + port)
 }
 
 
