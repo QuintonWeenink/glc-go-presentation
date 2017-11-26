@@ -66,40 +66,21 @@ func serveRestGopher(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string(response))
 }
 
-// func main() {
-// 	port := os.Getenv("PORT")
-// 	if port == "" {
-// 		port = "8080"
-// 	}
-// 	host := "localhost:" + port
-//
-// 	fmt.Println("Serving on " + host + "..")
-//
-// 	http.HandleFunc("/gopher", serveRestGopher)
-// 	http.HandleFunc("/", serveRest)
-//
-// 	http.ListenAndServe(host, nil)
-// }
-
 func main() {
 	port := os.Getenv("PORT")
 
 	if port == "" {
 		log.Fatal("$PORT must be set")
 	}
+	host := "localhost:" + port
 
-	router := gin.New()
-	router.Use(gin.Logger())
-	router.LoadHTMLGlob("templates/*.tmpl.html")
-	router.Static("/static", "static")
+	fmt.Println("Serving on " + host + "..")
 
-	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.tmpl.html", nil)
-	})
+	http.HandleFunc("/gopher", serveRestGopher)
+	http.HandleFunc("/", serveRest)
 
-	router.Run(":" + port)
+	http.ListenAndServe(host, nil)
 }
-
 
 func getJsonResponse() ([]byte, error){
 	fruits := make(map[string] int)
