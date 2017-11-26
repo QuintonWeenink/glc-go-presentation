@@ -29,19 +29,8 @@ else
 endif
 
 test:
-	go test ./inputs/
-	go test ./storage/
+	go test ./inputs
 
 clean:
 	rm ./glide
 	rm -fr ./build
-
-release: textql
-	git tag -a `cat VERSION`
-	git push origin `cat VERSION`
-
-install: deps test
-	go install -ldflags "-X main.VERSION=`cat VERSION`" ./textql/textql.go
-
-man:
-	ronn man/textql.1.ronn
