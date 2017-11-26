@@ -1,18 +1,6 @@
 package main
 
 import (
-	"log"
-	"net/http"
-	"os"
-
-	"github.com/gin-gonic/gin"
-	_ "github.com/heroku/x/hmetrics/onload"
-)
-
-
-package main
-
-import (
 	"net/http"
 	"fmt"
 	"os"
