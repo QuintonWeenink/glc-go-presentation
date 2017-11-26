@@ -1,36 +1,13 @@
-.PHONY: all test clean man glide fast release install
+GO_BUILD_ENV := CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+DOCKER_BUILD=$(shell pwd)/.docker_build
+DOCKER_CMD=$(DOCKER_BUILD)/go-getting-started
 
-GO15VENDOREXPERIMENT=1
-
-all: textql
-
-textql: deps test
-	go build -ldflags "-X main.VERSION=`cat VERSION`" -o ./build/textql ./textql/main.go
-
-fast:
-	go build -i -ldflags "-X main.VERSION=`cat VERSION`-dev" -o ./build/textql ./textql/main.go
-
-deps: glide
-	./glide install
-
-glide:
-ifeq ($(shell uname),Darwin)
-	curl -L https://github.com/Masterminds/glide/releases/download/0.5.0/glide-darwin-amd64.zip -o glide.zip
-	unzip glide.zip
-	mv ./darwin-amd64/glide ./glide
-	rm -fr ./darwin-amd64
-	rm ./glide.zip
-else
-	curl -L https://github.com/Masterminds/glide/releases/download/0.5.0/glide-linux-386.zip -o glide.zip
-	unzip glide.zip
-	mv ./linux-386/glide ./glide
-	rm -fr ./linux-386
-	rm ./glide.zip
-endif
-
-test:
-	go test ./inputs
+$(DOCKER_CMD): clean
+	mkdir -p $(DOCKER_BUILD)
+	$(GO_BUILD_ENV) go build -v -o $(DOCKER_CMD) .
 
 clean:
-	rm ./glide
-	rm -fr ./build
+	rm -rf $(DOCKER_BUILD)
+
+heroku: $(DOCKER_CMD)
+	heroku container:push web
