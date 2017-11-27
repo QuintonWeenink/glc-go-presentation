@@ -26,19 +26,26 @@ type Data struct {
 }
 
 type Payload struct {
-	Stuff Data
+	Stuff interface{}
 }
 
 type Request struct {
 	Item map[string] interface{}
 }
 
+type Response struct {
+	Item interface{}
+}
+
 var vegetables map[string] int = make(map[string] int)
 var fruits map[string] int = make(map[string] int)
 
 
-func serveRest(w http.ResponseWriter, r *http.Request) {
-	response, err := getJsonResponse()
+func restBase(w http.ResponseWriter, r *http.Request) {
+	d := Data{fruits, vegetables}
+	p := Payload{d}
+
+	response, err := json.MarshalIndent(p, "", "  ")
 	if err != nil {
 		panic(err)
 	}
@@ -47,15 +54,12 @@ func serveRest(w http.ResponseWriter, r *http.Request) {
 }
 
 func postFruit(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r)
-
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		panic(err)
 	}
 
 	var p Request
-
 	err = json.Unmarshal(body, &p)
 	if err != nil {
 		panic(err)
@@ -74,6 +78,29 @@ func postFruit(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, string("Your fruit has been added"))
 }
 
+func getFruit(w http.ResponseWriter) {
+	d := Response{fruits}
+	p := Payload{d}
+
+	response, err := json.MarshalIndent(p, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Fprintf(w, string(response))
+}
+
+func restFruit(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case "POST":
+		postFruit(w, r)
+	case "GET":
+		getFruit(w)
+	default:
+		fmt.Fprintf(w, string("Method not mapped"))
+	}
+}
+
 func main() {
 	vegetables["Carrots"] = 21
 	vegetables["Peppers"] = 0
@@ -90,15 +117,8 @@ func main() {
 
 	fmt.Println("Serving on " + host + "..")
 
-	http.HandleFunc("/fruit", postFruit)
-	http.HandleFunc("/", serveRest)
+	http.HandleFunc("/fruit", restFruit)
+	http.HandleFunc("/", restBase)
 
 	http.ListenAndServe(host, nil)
-}
-
-func getJsonResponse() ([]byte, error){
-	d := Data{fruits, vegetables}
-	p := Payload{d}
-
-	return json.MarshalIndent(p, "", "  ")
 }
