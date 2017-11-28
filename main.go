@@ -1,17 +1,17 @@
 package main
 
 import (
-	"net/http"
-	"fmt"
-	"os"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"net/http"
+	"os"
 	// "github.com/quintonweenink/glc-go-presentation/items"
 )
 
 // In mem DB
-var vegetables = make(map[string] int)
-var fruits = make(map[string] int)
+var vegetables = make(map[string]int)
+var fruits = make(map[string]int)
 
 //Payload used to contain requests
 type Payload struct {
@@ -20,8 +20,8 @@ type Payload struct {
 
 func restBase(w http.ResponseWriter, r *http.Request) {
 	type data struct {
-		Fruit		Fruits
-		Verggies	Vegetables
+		Fruit    Fruits
+		Verggies Vegetables
 	}
 
 	d := data{fruits, vegetables}
@@ -42,7 +42,7 @@ func postFruit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	type Request struct {
-		Item map[string] interface{}
+		Item map[string]interface{}
 	}
 
 	var p Request
