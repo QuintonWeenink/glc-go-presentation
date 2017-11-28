@@ -6,7 +6,6 @@ import (
 	"os"
 	"encoding/json"
 	"io/ioutil"
-
 	// "github.com/quintonweenink/glc-go-presentation/items"
 )
 
