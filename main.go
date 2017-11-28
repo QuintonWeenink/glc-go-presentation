@@ -6,19 +6,15 @@ import (
 	"os"
 	"encoding/json"
 	"io/ioutil"
+
+	// "github.com/quintonweenink/glc-go-presentation/items"
 )
 
-type Item interface {
-
-}
-
-type Fruit struct {
-	name string
-	amount int
-}
-
+// In mem DB
 type Fruits map[string] int
 type Vegetables map[string] int
+var vegetables map[string] int = make(map[string] int)
+var fruits map[string] int = make(map[string] int)
 
 type Data struct {
 	Fruit Fruits
@@ -36,10 +32,6 @@ type Request struct {
 type Response struct {
 	Item interface{}
 }
-
-var vegetables map[string] int = make(map[string] int)
-var fruits map[string] int = make(map[string] int)
-
 
 func restBase(w http.ResponseWriter, r *http.Request) {
 	d := Data{fruits, vegetables}
@@ -102,9 +94,9 @@ func restFruit(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Initialize in mem DB
 	vegetables["Carrots"] = 21
 	vegetables["Peppers"] = 0
-
 	fruits["Apples"] = 25
 	fruits["Peppers"] = 11
 
