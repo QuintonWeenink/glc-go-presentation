@@ -2,7 +2,7 @@ package items
 
 // Fruit Object
 type Fruit struct {
-	name string
+	name   string
 	amount int
 }
 
