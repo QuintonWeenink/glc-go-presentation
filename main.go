@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	// "github.com/quintonweenink/glc-go-presentation/items"
+	//"github.com/quintonweenink/glc-go-presentation/items"
 )
 
 // In mem DB
@@ -20,8 +20,8 @@ type Payload struct {
 
 func restBase(w http.ResponseWriter, r *http.Request) {
 	type data struct {
-		Fruit    Fruits
-		Verggies Vegetables
+		Fruit    interface{}
+		Verggies interface{}
 	}
 
 	d := data{fruits, vegetables}

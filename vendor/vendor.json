@@ -3,5 +3,5 @@
 	"ignore": "test",
 	"package": [
 	],
-	"rootPath": "github.com/heroku/go-getting-started"
+	"rootPath": "github.com/quintonweenink/glc-go-presentation"
 }

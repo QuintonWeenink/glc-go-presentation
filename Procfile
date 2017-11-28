@@ -1,1 +1,1 @@
-web: go-getting-started
+web: glc-go-presentation
