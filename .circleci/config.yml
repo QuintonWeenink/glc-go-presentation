@@ -22,5 +22,5 @@ jobs:
       - checkout
 
       # specify any bash command here prefixed with `run: `
-      - run: go test -v ./inputs/
+      - run: go test -v ./items
       # - run: go run main.go
