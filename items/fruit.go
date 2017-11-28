@@ -1,5 +1,6 @@
 package items
 
+// Fruit Object
 type Fruit struct {
 	name string
 	amount int

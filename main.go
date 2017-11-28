@@ -10,30 +10,21 @@ import (
 )
 
 // In mem DB
-type Fruits map[string] int
-type Vegetables map[string] int
-var vegetables map[string] int = make(map[string] int)
-var fruits map[string] int = make(map[string] int)
+var vegetables = make(map[string] int)
+var fruits = make(map[string] int)
 
-type Data struct {
-	Fruit Fruits
-	Verggies Vegetables
-}
-
+//Payload used to contain requests
 type Payload struct {
 	Stuff interface{}
 }
 
-type Request struct {
-	Item map[string] interface{}
-}
-
-type Response struct {
-	Item interface{}
-}
-
 func restBase(w http.ResponseWriter, r *http.Request) {
-	d := Data{fruits, vegetables}
+	type data struct {
+		Fruit Fruits
+		Verggies Vegetables
+	}
+
+	d := data{fruits, vegetables}
 	p := Payload{d}
 
 	response, err := json.MarshalIndent(p, "", "  ")
@@ -48,6 +39,10 @@ func postFruit(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		panic(err)
+	}
+
+	type Request struct {
+		Item map[string] interface{}
 	}
 
 	var p Request
@@ -70,6 +65,10 @@ func postFruit(w http.ResponseWriter, r *http.Request) {
 }
 
 func getFruit(w http.ResponseWriter) {
+	type Response struct {
+		Item interface{}
+	}
+
 	d := Response{fruits}
 	p := Payload{d}
 
