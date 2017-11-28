@@ -20,8 +20,8 @@ type Payload struct {
 
 func restBase(w http.ResponseWriter, r *http.Request) {
 	type data struct {
-		Fruit Fruits
-		Verggies Vegetables
+		Fruit		Fruits
+		Verggies	Vegetables
 	}
 
 	d := data{fruits, vegetables}
